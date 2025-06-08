@@ -401,7 +401,25 @@ export default function resetPasswordTemplate(resetURL, toEmail, name) {
             <!-- Header Section -->
             <div class="email-header">
                 <div class="lock-icon">
-                    🗝️
+                    <div 
+                        className="security-icon" 
+                        style={{
+                        width: '60px',
+                        height: '60px',
+                        margin: '0 auto',
+                        borderRadius: '50%',
+                        backgroundColor: '#0070f3',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: '32px',
+                        userSelect: 'none'
+                        }}
+                    >
+                        @
+                    </div>
                 </div>
                 <h1>Password Reset Request</h1>
                 <p>Secure access to your account</p>
