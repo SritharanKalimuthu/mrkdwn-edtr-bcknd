@@ -115,8 +115,6 @@ export const getFile = async (fileId) => {
   }
 };
 
-
-
 // Download File
 export const downloadFile = async (fileId, destinationDir = './') => {
   const metaRes = await drive.files.get({

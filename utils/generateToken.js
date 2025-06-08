@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
+import crypto from 'crypto';
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultsecret";
 const secret = new TextEncoder().encode(JWT_SECRET);
@@ -39,3 +40,7 @@ export const verifyToken = async (token) => {
     return null;
   }
 };
+
+export const generateResetToken = () => {
+  return crypto.randomBytes(32).toString('hex'); 
+}

@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true, match: [/.+\@.+\..+/, "Please use a valid email address"], },
     password: { type: String, required: true },
+    resetToken: { type: String },
+    resetTokenExpires: { type:Date }
 }, {
     timestamps: true,  
 });

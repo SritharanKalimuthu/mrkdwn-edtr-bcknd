@@ -2,9 +2,9 @@ import bcrypt from "bcryptjs";
 import user from "../models/user.model.js";
 import Otp from "../models/otp.model.js";
 import otpGenerator from "otp-generator";
-import sendOtpEmail from "../utils/otpGenerator.js";
+import { sendOtpEmail } from "../utils/mailGenerator.js";
 import crypto from "crypto";
-import { createFolder } from "../utils/googleService.js";
+import { createFolder, deleteFolder } from "../utils/googleService.js";
 
 export const getUser = async(req, res) => {
     try{
@@ -120,6 +120,31 @@ export const changeUserName = async( req, res ) => {
         await isUserExist.save();
 
         res.status(200).json({ message: "success", user: {name:isUserExist.name, email:isUserExist.email} });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: "Internal Server Error", error: err });
+    }
+}
+
+export const DeleteUser = async( req, res ) => {
+    try{
+        const { email, password } = req.body;
+
+        const isUserExist = await user.findOne({ email });
+        if(!isUserExist){
+            res.status(404).json({message:"User not found"})
+        }
+
+        const isMatch = await bcrypt.compare(password, isUserExist.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        const driveFolderId = isUserExist.driveFolderId;
+        await deleteFolder(driveFolderId);
+
+        await user.deleteOne({ email });
+        res.status(200).json({ message: "User deleted successfully" });
     } catch(err) {
         console.log(err);
         res.status(500).json({ message: "Internal Server Error", error: err });
