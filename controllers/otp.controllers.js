@@ -32,16 +32,29 @@ export const verifyOtp = async (req, res) => {
         const accessToken = await generateAccessToken(user);
         const refreshToken = await generateRefreshToken(user);
 
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true, 
+            sameSite: 'None', 
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            maxAge: 15 * 60 * 1000,
+        });
+
         res.status(200).json({
             message: "OTP verified successfully",
             user: {
                 name: user.name,
                 email: user.email,
                 userKey: user.userKey
-            },
-            accessToken,
-            refreshToken
+            }
         });
+        
     } catch (err) {
         console.error("Error verifying OTP:", err);
         res.status(500).json({ message: "Internal Server Error", error: err });
